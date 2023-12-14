@@ -1,12 +1,14 @@
 import React, {useState} from "react";
-import { SafeAreaView, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 
 import firebase from "../../services/firebaseConnection";
+import Feather from 'react-native-vector-icons/Feather'
 
 export default function Login({ changeStatus }){
     const [type, setType] = useState('login');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [hidePass, setHidePass] = useState(true); 
 
     async function handleLogin(){
       if(type === 'login'){
@@ -48,23 +50,34 @@ export default function Login({ changeStatus }){
     }
   
     return(
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Tela de Login</Text>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Tela de Login</Text>
 
          
-            <TextInput
-                placeholder="Seu email"
-                style={styles.input}
-                value={email}
-                onChangeText={ (text) => setEmail(text) }
-            />
+        <TextInput
+          placeholder="Digite seu email"
+          style={styles.input}
+          value={email}
+          onChangeText={ (text) => setEmail(text) }
+        />
 
-            <TextInput
-                placeholder="********"
-                style={styles.input}
-                value={password}
-                onChangeText={ (text) => setPassword(text) }
-            />
+        <View style={styles.areaInputPassword}>
+          <TextInput
+            placeholder="Digite sua senha"
+            style={styles.inputPassword}
+            secureTextEntry={hidePass}
+            value={password}
+            onChangeText={ (text) => setPassword(text) }
+          />
+          <TouchableOpacity style={styles.icon} onPress={() => setHidePass(!hidePass)}>
+            { 
+              hidePass ? 
+                <Feather name="eye" size={20} color={'#121212'}/>
+              : 
+              <Feather name="eye-off" size={20} color={'#121212'}/>  
+            }
+          </TouchableOpacity>
+        </View>
 
             <TouchableOpacity
                 style={[styles.handleLogin, {backgroundColor: type === 'login' ? '#3EA6F2' : '#141414' }]}
@@ -98,7 +111,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: '#FFF',
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: 5,
     borderColor: '#141414'
   },
   textHandle:{
@@ -114,7 +127,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 45,
-    borderRadius: 4,
+    borderRadius: 5,
     marginBottom: 5
+  },
+  areaInputPassword:{
+    flexDirection: 'row',
+    borderRadius: 5,
+    height: 45,
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#141414',
+    marginBottom: 10
+  },
+  inputPassword:{
+    width: '88%',
+    height: 45,
+    padding: 5,
+    fontSize: 18
+  },
+  icon:{
+    width: '12%',
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
